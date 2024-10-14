@@ -1,13 +1,18 @@
 spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
   jpa:
+    hibernate:
+      ddl-auto: update
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQLDialect
     properties:
-      hibernate:
-        format_sql: true
-        highlight_sql: true
-  config:
-    import:
-      - classpath:application-db.yml
-      - classpath:application-secret.yml
+      hibernate.globally_quoted_identifiers: true
+      hibernate.format_sql: true
+      hibernate.highlight_sql: true
 
 logging:
   level:
@@ -22,7 +27,7 @@ logging:
       springframework:
         security: DEBUG
         web: DEBUG
-        jwt:
+        jwt: DEBUG
     com:
       example:
         elkprac:
@@ -31,3 +36,76 @@ logging:
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
   config: classpath:logback.xml
+
+jwt:
+  secret:
+    key:
+      access: ${JWT_ACCESS_KEY}
+      refresh: ${JWT_REFRESH_KEY}
+  access:
+    validity:
+      in:
+        seconds: 5000
+  refresh:
+    validity:
+      in:
+        seconds: 1209600
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#spring:
+#  jpa:
+#    properties:
+#      hibernate:
+#        format_sql: true
+#        highlight_sql: true
+#  config:
+#    import:
+#      - classpath:application-db.yml
+#      - classpath:application-secret.yml
+#
+#logging:
+#  level:
+#    root: INFO
+#    org:
+#      hibernate:
+#        SQL: DEBUG
+#        type:
+#          descriptor:
+#            sql:
+#              BasicBinder: TRACE
+#      springframework:
+#        security: DEBUG
+#        web: DEBUG
+#        jwt:
+#    com:
+#      example:
+#        elkprac:
+#          security:
+#            jwt: DEBUG
+#  pattern:
+#    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+#  config: classpath:logback.xml
