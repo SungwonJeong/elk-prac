@@ -20,6 +20,15 @@ jobs:
     permissions:
       contents: read
 
+    services:
+      mysql:
+        image: mysql:9.0
+        ports:
+          - 3306:3306
+        env:
+          MYSQL_ROOT_PASSWORD: tjddnjs12
+          MYSQL_DATABASE: elk
+    
     steps:
     - uses: actions/checkout@v4
     - name: Set up JDK 17
