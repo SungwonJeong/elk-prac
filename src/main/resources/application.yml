@@ -1,0 +1,33 @@
+spring:
+  jpa:
+    properties:
+      hibernate:
+        format_sql: true
+        highlight_sql: true
+  config:
+    import:
+      - classpath:application-db.yml
+      - classpath:application-secret.yml
+
+logging:
+  level:
+    root: INFO
+    org:
+      hibernate:
+        SQL: DEBUG
+        type:
+          descriptor:
+            sql:
+              BasicBinder: TRACE
+      springframework:
+        security: DEBUG
+        web: DEBUG
+        jwt:
+    com:
+      example:
+        elkprac:
+          security:
+            jwt: DEBUG
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+  config: classpath:logback.xml

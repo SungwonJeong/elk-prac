@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <!-- 애플리케이션 이름을 로그에 포함시키기 위한 속성 정의 -->
+    <property name="APP_NAME" value="elk-prac"/>
+
+    <!-- 로그 파일 저장 경로와 이름 설정 -->
+    <property name="LOG_PATH" value="./log"/>
+    <property name="FILE_NAME" value="elk-prac"/>
+
+    <!-- 콘솔 로그 패턴 설정 (컬러 포함) -->
+    <property name="CONSOLE_LOG_PATTERN"
+              value="%d{yyyy-MM-dd HH:mm:ss.SSS} %highlight(%-5level) [%thread] %cyan(%logger{36}) - %msg%n"/>
+
+    <!-- 파일 로그 패턴 설정 (일반 텍스트 형식) -->
+    <property name="FILE_LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} %level [%thread] %logger{36} - %msg%n"/>
+
+    <!-- 콘솔에 컬러 로그 출력 설정 -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <!-- JSON 형식의 파일 로그 설정 -->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_PATH}/${FILE_NAME}-json.log</file>
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder"/> <!-- JSON 형식의 로그 파일 -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH}/${FILE_NAME}-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <maxHistory>30</maxHistory> <!-- 30일간 로그 보관 -->
+            <timeBasedFileNamingAndTriggeringPolicy
+                    class="ch.qos.logback.core.rolling.SizeAndTimeBasedFileNamingAndTriggeringPolicy">
+                <maxFileSize>100MB</maxFileSize> <!-- 100MB 초과 시 롤링 -->
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+    </appender>
+
+    <!-- 로그스태시 설정 (TCP 소켓을 통해 로그 전송) -->
+    <appender name="LOGSTASH" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+        <destination>localhost:5000</destination> <!-- 로그스태시가 수신할 포트 -->
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder"/> <!-- JSON 형식의 로그 전송 -->
+    </appender>
+
+    <!-- 로거 설정 -->
+    <logger name="org.springframework.security" level="DEBUG"/>
+    <logger name="com.example.elkprac.jwt" level="DEBUG"/>
+    <logger name="com.example.elkprac" level="INFO"/>
+
+    <!-- 기본 로그 설정 -->
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="FILE"/>
+        <appender-ref ref="LOGSTASH"/> <!-- 로그스태시로 전송 -->
+    </root>
+
+    <!-- 운영 환경용 설정 -->
+    <!--    <springProfile name="prod">-->
+    <!--        <root level="INFO">-->
+    <!--            <appender-ref ref="CONSOLE"/>-->
+    <!--            <appender-ref ref="FILE"/>-->
+    <!--        </root>-->
+    <!--    </springProfile>-->
+</configuration>

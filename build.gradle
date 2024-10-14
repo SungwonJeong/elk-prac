@@ -1,0 +1,59 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.3.4'
+    id 'io.spring.dependency-management' version '1.1.6'
+}
+
+group = 'com.example'
+version = '0.0.1-SNAPSHOT'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // 기본적으로 spring-boot-starter에 aop를 포함하고 있어,
+    // spring-boot-starter-aop 라이브러리를 추가해주지 않아도 @Aspect 애노테이션을 사용할 수 있습니다.
+    // 다만, spring-boot-starter-sop는 AOP 사용을 위한 편의 기능을 제공하고 있기 때문에,
+    // AOP 기능을 활용할 때 해당 의존성을 추가해주는 것이 좋습니다.
+    implementation 'org.springframework.boot:spring-boot-starter-aop'
+
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-data-elasticsearch'
+
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.security:spring-security-test'
+    runtimeOnly 'com.mysql:mysql-connector-j'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+    implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
+    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+
+    // Argon2PasswordEncoder
+    implementation 'org.bouncycastle:bcprov-jdk18on:1.76'
+
+    //logstash
+    implementation 'net.logstash.logback:logstash-logback-encoder:7.4'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}

@@ -1,0 +1,6 @@
+http.host: 0.0.0.0
+node.name: logstash
+
+## 로그스태시 모니터링 활성화
+xpack.monitoring.enabled: true
+xpack.monitoring.elasticsearch.hosts: [ "http://elasticsearch:9200" ]
